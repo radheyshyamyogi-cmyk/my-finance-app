@@ -1,0 +1,808 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#173b67">
+<title>My Finance V2.0</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f1f4f9;color:#172033;font-family:Arial,sans-serif}
+header{background:#173b67;color:white;padding:22px 17px}
+header h2{margin:0 0 5px}
+header p{margin:0;color:#dce8f5}
+main{max-width:700px;margin:auto;padding:13px}
+.card{background:white;padding:16px;border-radius:14px;margin-bottom:13px;box-shadow:0 3px 12px #0000000c}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:white;padding:15px;border-radius:13px;box-shadow:0 2px 10px #00000008}
+.stat small{color:#687487}
+.stat strong{display:block;font-size:22px;margin-top:9px;overflow-wrap:anywhere}
+.green{color:#13875a}.red{color:#d54444}.blue{color:#2768bd}
+h3{margin:5px 0 15px;font-size:18px}
+label{display:block;font-size:14px;margin:10px 0 4px;color:#46536a}
+input,select,textarea{width:100%;padding:12px;border:1px solid #d4dce8;border-radius:9px;background:white;font-size:15px;color:#172033}
+button{border:0;border-radius:9px;padding:13px;background:#173b67;color:white;font-size:15px;font-weight:bold;cursor:pointer;margin-top:9px}
+button.full{width:100%}
+button.greenbtn{background:#16845b}
+button.redbtn{background:#d54444}
+button.graybtn{background:#e8eef7;color:#173b67}
+button.small{padding:8px 10px;font-size:12px;margin:4px 2px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.item{padding:12px 0;border-bottom:1px solid #e9edf3}
+.item:last-child{border-bottom:0}
+.muted{color:#748096;font-size:12px}
+.pill{font-size:11px;padding:4px 7px;border-radius:20px;background:#edf1f7;color:#33445d}
+.tabs{display:flex;gap:7px;overflow-x:auto;margin:0 0 13px}
+.tabs button{white-space:nowrap;padding:10px 13px;margin:0}
+.tabs button.active{background:#16845b}
+.hidden{display:none!important}
+.balance{font-size:19px;font-weight:bold}
+footer{text-align:center;color:#748096;padding:20px;font-size:12px}
+</style>
+</head>
+<body>
+
+<header>
+<h2>💰 My Finance V2.0</h2>
+<p>Family & Personal Finance Manager</p>
+</header>
+
+<main>
+
+<div class="card">
+<label>Monthly Report</label>
+<input type="month" id="month">
+</div>
+
+<div class="grid">
+<div class="stat"><small>Monthly Income</small><strong class="green" id="income">₹0</strong></div>
+<div class="stat"><small>Monthly Expenses</small><strong class="red" id="expenses">₹0</strong></div>
+<div class="stat"><small>Monthly Savings*</small><strong class="blue" id="savings">₹0</strong></div>
+<div class="stat"><small>SIP Investment</small><strong id="sip">₹0</strong></div>
+<div class="stat"><small>Money to Receive</small><strong class="green" id="receive">₹0</strong></div>
+<div class="stat"><small>Money to Pay</small><strong class="red" id="pay">₹0</strong></div>
+</div>
+<p class="muted">*Income minus expenses and SIP. यह वास्तविक बैंक बैलेंस नहीं है।</p>
+
+<div class="tabs">
+<button class="active" onclick="showTab('transactions',this)">Transactions</button>
+<button onclick="showTab('loans',this)">Udhar</button>
+<button onclick="showTab('reports',this)">Reports</button>
+<button onclick="showTab('backup',this)">Backup</button>
+</div>
+
+<!-- TRANSACTIONS -->
+
+<section id="transactions">
+
+<div class="card">
+<h3>➕ Add Income / Expense</h3>
+
+<label>Transaction Type</label>
+<select id="type">
+<option value="income">Income</option>
+<option value="expense">Expense</option>
+<option value="sip">Mutual Fund SIP</option>
+<option value="emi">Loan EMI</option>
+<option value="cardpayment">Credit Card Bill Payment</option>
+</select>
+
+<label>Date</label>
+<input type="date" id="date">
+
+<label>Category</label>
+<select id="category">
+<option>Salary</option>
+<option>Bank Interest</option>
+<option>Cash Interest</option>
+<option>Other Income</option>
+<option>School Fees</option>
+<option>Children Clothes</option>
+<option>Children Shopping</option>
+<option>Children Other</option>
+<option>Wife Expenses</option>
+<option>Cash Given to Wife</option>
+<option>Mother Expenses</option>
+<option>Father Expenses</option>
+<option>Personal Clothes</option>
+<option>Personal Shopping</option>
+<option>Personal Expenses</option>
+<option>Room Expenses</option>
+<option>Household Expenses</option>
+<option>Rent</option>
+<option>Food / Grocery</option>
+<option>Medical</option>
+<option>Electricity / Bills</option>
+<option>Travel</option>
+<option>Insurance / LIC</option>
+<option>Loan EMI</option>
+<option>Mutual Fund SIP</option>
+<option>Other Expense</option>
+<option>Credit Card Payment</option>
+</select>
+
+<label>Family Member</label>
+<select id="family">
+<option>Self</option>
+<option>Wife</option>
+<option>Children</option>
+<option>Mother</option>
+<option>Father</option>
+<option>Home / Family</option>
+</select>
+
+<label>Payment Account / Received In</label>
+<select id="account">
+<option>Cash</option>
+<option>Saving Account</option>
+<option>PhonePe / UPI</option>
+<option>Credit Card</option>
+</select>
+
+<label>Description</label>
+<input id="description" placeholder="Details लिखें">
+
+<label>Amount (₹)</label>
+<input id="amount" type="number" min="0.01" step="0.01" placeholder="Amount">
+
+<button class="full greenbtn" onclick="addTransaction()">Save Transaction</button>
+</div>
+
+<div class="card">
+<h3>💳 Credit Card Summary</h3>
+<div class="row"><span>Card Expenses</span><strong id="cardExpense">₹0</strong></div>
+<div class="row"><span>Bill Payments</span><strong id="cardPaid">₹0</strong></div>
+<div class="row"><span>Outstanding Bill</span><strong class="red" id="cardDue">₹0</strong></div>
+<p class="muted">Card से किए गए खर्च और बिल भुगतान का हिसाब अलग रखा जाता है।</p>
+</div>
+
+<div class="card">
+<h3>📋 Transaction History</h3>
+<div id="history">No transactions yet.</div>
+</div>
+
+</section>
+
+<!-- LOANS -->
+
+<section id="loans" class="hidden">
+
+<div class="card">
+<h3>🤝 Add Udhar Record</h3>
+
+<label>Transaction</label>
+<select id="loanType">
+<option value="give">किसी को उधार दिया (मुझे वापस लेना है)</option>
+<option value="take">किसी से उधार लिया (मुझे वापस देना है)</option>
+</select>
+
+<label>Person Name</label>
+<input id="person" placeholder="नाम लिखें">
+
+<label>WhatsApp Mobile Number</label>
+<input id="phone" type="tel" placeholder="91XXXXXXXXXX">
+
+<label>Transaction Date</label>
+<input id="loanDate" type="date">
+
+<label>Due Date</label>
+<input id="dueDate" type="date">
+
+<label>Account</label>
+<select id="loanAccount">
+<option>Cash</option>
+<option>Saving Account</option>
+<option>PhonePe / UPI</option>
+</select>
+
+<label>Amount (₹)</label>
+<input id="loanAmount" type="number" min="0.01" step="0.01" placeholder="Amount">
+
+<label>Details</label>
+<input id="loanNote" placeholder="किस काम के लिए">
+
+<button class="full greenbtn" onclick="addLoan()">Save Udhar Record</button>
+</div>
+
+<div class="card">
+<h3>💰 Partial Payment / Recovery</h3>
+
+<label>Select Person / Loan</label>
+<select id="settleLoan"></select>
+
+<label>Payment Date</label>
+<input type="date" id="settleDate">
+
+<label>Payment Account</label>
+<select id="settleAccount">
+<option>Cash</option>
+<option>Saving Account</option>
+<option>PhonePe / UPI</option>
+</select>
+
+<label>Payment Amount (₹)</label>
+<input type="number" id="settleAmount" min="0.01" step="0.01" placeholder="Amount">
+
+<button class="full" onclick="settleLoan()">Save Partial / Full Payment</button>
+</div>
+
+<div class="card">
+<h3>📒 Udhar Register</h3>
+<div id="loanHistory">No loan records.</div>
+</div>
+
+</section>
+
+<!-- REPORTS -->
+
+<section id="reports" class="hidden">
+
+<div class="card">
+<h3>📊 Family-wise Expenses</h3>
+<div id="familyReport"></div>
+</div>
+
+<div class="card">
+<h3>📁 Category-wise Expenses</h3>
+<div id="categoryReport"></div>
+</div>
+
+<div class="card">
+<h3>💵 Account-wise Activity</h3>
+<div id="accountReport"></div>
+</div>
+
+<div class="card">
+<h3>📈 Monthly Summary</h3>
+<div id="monthlyReport"></div>
+</div>
+
+</section>
+
+<!-- BACKUP -->
+
+<section id="backup" class="hidden">
+
+<div class="card">
+<h3>☁️ Backup & Restore</h3>
+<p class="muted">JSON backup में आपके transactions, udhar और partial payments सुरक्षित होंगे।</p>
+<button class="full greenbtn" onclick="backupData()">Download Complete Backup</button>
+
+<label>Restore Backup File</label>
+<input type="file" id="restoreFile" accept=".json,application/json">
+<button class="full graybtn" onclick="restoreData()">Restore Data</button>
+
+<button class="full graybtn" onclick="openDrive()">Open Google Drive</button>
+
+<p class="muted">Download की गई JSON फाइल को Google Drive में Upload करें।</p>
+</div>
+
+<div class="card">
+<h3>🔒 Data & Privacy</h3>
+<p class="muted">डेटा अभी इसी Browser/WebView के Local Storage में है। यह Encrypted नहीं है। फोन की Storage साफ करने या Browser Data मिटाने से डेटा जा सकता है। नियमित Backup रखें।</p>
+<button class="full redbtn" onclick="clearData()">Delete All App Data</button>
+</div>
+
+</section>
+
+</main>
+
+<footer>My Finance V2.0 | Personal Use</footer>
+
+<script>
+"use strict";
+
+const KEY = "myFinanceV2Data";
+
+let db = {
+ transactions: [],
+ loans: [],
+ payments: [],
+ cardPayments: []
+};
+
+const $ = id => document.getElementById(id);
+
+function uid(){
+ return Date.now().toString(36)+Math.random().toString(36).slice(2);
+}
+
+function today(){
+ const d=new Date();
+ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
+
+function money(n){
+ return "₹"+Number(n||0).toLocaleString("en-IN",{maximumFractionDigits:2});
+}
+
+function safe(text){
+ return String(text??"").replace(/[&<>"']/g,c=>({
+ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+ })[c]);
+}
+
+function save(){
+ try{
+  localStorage.setItem(KEY,JSON.stringify(db));
+  return true;
+ }catch(e){
+  alert("Storage error. Please download backup.");
+  return false;
+ }
+}
+
+function load(){
+ try{
+  const x=localStorage.getItem(KEY);
+  if(x){
+   const d=JSON.parse(x);
+   if(d && Array.isArray(d.transactions) &&
+      Array.isArray(d.loans) &&
+      Array.isArray(d.payments) &&
+      Array.isArray(d.cardPayments)){
+    db=d;
+   }
+  }
+ }catch(e){
+  alert("Saved data could not be read. Do not clear app data; check your backup.");
+ }
+}
+
+function showTab(id,btn){
+ document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));
+ $(id).classList.remove("hidden");
+ document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active"));
+ btn.classList.add("active");
+ render();
+}
+
+function loanPaid(loan){
+ return db.payments.filter(p=>p.loanId===loan.id)
+  .reduce((s,p)=>s+p.amount,0);
+}
+
+function loanDue(loan){
+ return Math.max(0,loan.amount-loanPaid(loan));
+}
+
+function monthRecords(){
+ const m=$("month").value;
+ return db.transactions.filter(t=>t.date.startsWith(m));
+}
+
+function addTransaction(){
+ const type=$("type").value;
+ const date=$("date").value;
+ const category=$("category").value;
+ const family=$("family").value;
+ const account=$("account").value;
+ const description=$("description").value.trim();
+ const amount=Number($("amount").value);
+
+ if(!date || !description || !Number.isFinite(amount) || amount<=0){
+  alert("Date, Description और सही Amount भरें।");
+  return;
+ }
+
+ if(type==="cardpayment"){
+  if(account==="Credit Card"){
+   alert("Bill Payment के लिए Cash, Saving Account या PhonePe चुनें।");
+   return;
+  }
+  db.cardPayments.push({
+   id:uid(),date,account,amount,description
+  });
+ }else{
+  if(type==="income" && account==="Credit Card"){
+   alert("Income के लिए Cash, Saving Account या PhonePe चुनें।");
+   return;
+  }
+  if(type==="sip" && account==="Credit Card"){
+   alert("SIP के लिए Cash, Saving Account या PhonePe चुनें।");
+   return;
+  }
+  db.transactions.push({
+   id:uid(),type,date,category,family,account,description,amount
+  });
+ }
+
+ if(!save()) return;
+
+ $("description").value="";
+ $("amount").value="";
+ render();
+ alert("Transaction saved successfully!");
+}
+
+function addLoan(){
+ const direction=$("loanType").value;
+ const person=$("person").value.trim();
+ const phone=$("phone").value.trim();
+ const date=$("loanDate").value;
+ const dueDate=$("dueDate").value;
+ const account=$("loanAccount").value;
+ const amount=Number($("loanAmount").value);
+ const note=$("loanNote").value.trim();
+
+ if(!person || !date || !Number.isFinite(amount) || amount<=0){
+  alert("Person Name, Date और Amount सही भरें।");
+  return;
+ }
+
+ if(phone && !/^[0-9+\s-]{8,16}$/.test(phone)){
+  alert("Mobile Number सही दर्ज करें।");
+  return;
+ }
+
+ db.loans.push({
+  id:uid(),direction,person,phone,date,dueDate,account,amount,note
+ });
+
+ if(!save()) return;
+
+ $("person").value="";
+ $("phone").value="";
+ $("loanAmount").value="";
+ $("loanNote").value="";
+ render();
+ alert("Udhar record saved!");
+}
+
+function settleLoan(){
+ const id=$("settleLoan").value;
+ const loan=db.loans.find(l=>l.id===id);
+ const date=$("settleDate").value;
+ const account=$("settleAccount").value;
+ const amount=Number($("settleAmount").value);
+
+ if(!loan || !date || !Number.isFinite(amount) || amount<=0){
+  alert("Loan, Date और Amount भरें।");
+  return;
+ }
+
+ if(amount>loanDue(loan)+0.000001){
+  alert("Payment बाकी उधार से ज्यादा नहीं हो सकता।");
+  return;
+ }
+
+ db.payments.push({
+  id:uid(),loanId:id,date,account,amount
+ });
+
+ if(!save()) return;
+
+ $("settleAmount").value="";
+ render();
+ alert("Payment saved successfully!");
+}
+
+function whatsapp(loan){
+ const due=loanDue(loan);
+ if(due<=0){
+  alert("इस उधार का पूरा भुगतान हो चुका है।");
+  return;
+ }
+
+ const phone=loan.phone.replace(/\D/g,"");
+ const msg=loan.direction==="give"
+  ? "Namaste "+loan.person+" ji, aapko ₹"+loan.amount+" udhar diye the. Ab tak ₹"+loanPaid(loan)+" prapt hue hain. Abhi ₹"+due+" baki hain. Kripya suvidha anusar wapas kar dein. Dhanyavaad."
+  : "Namaste "+loan.person+" ji, maine aapse ₹"+loan.amount+" udhar liye the. Ab tak ₹"+loanPaid(loan)+" wapas kiye hain. Abhi ₹"+due+" baki hain. Dhanyavaad.";
+
+ const url=phone
+  ? "https://wa.me/"+phone+"?text="+encodeURIComponent(msg)
+  : "https://wa.me/?text="+encodeURIComponent(msg);
+
+ window.open(url,"_blank");
+}
+
+function renderLoans(){
+ const select=$("settleLoan");
+ select.replaceChildren();
+
+ const open=db.loans.filter(l=>loanDue(l)>0);
+ if(!open.length){
+  select.add(new Option("No pending loans",""));
+ }else{
+  open.forEach(l=>{
+   select.add(new Option(
+    l.person+" - "+(l.direction==="give"?"Lena hai":"Dena hai")+" - "+money(loanDue(l)),
+    l.id
+   ));
+  });
+ }
+
+ const box=$("loanHistory");
+ box.replaceChildren();
+
+ if(!db.loans.length){
+  box.textContent="No loan records.";
+ }else{
+  db.loans.slice().reverse().forEach(l=>{
+   const paid=loanPaid(l),due=loanDue(l);
+   const row=document.createElement("div");
+   row.className="item";
+   const title=document.createElement("strong");
+   title.textContent=l.person+" - "+(l.direction==="give"?"Mujhe Lena Hai":"Mujhe Dena Hai");
+   const detail=document.createElement("div");
+   detail.className="muted";
+   detail.textContent="Date: "+l.date+" | Due: "+(l.dueDate||"Not set")+" | "+l.account;
+   const values=document.createElement("div");
+   values.className="row";
+   const amounts=document.createElement("span");
+   amounts.innerHTML="Total: "+money(l.amount)+"<br>Paid: "+money(paid);
+   const balance=document.createElement("strong");
+   balance.className="balance "+(due?"red":"green");
+   balance.textContent="Balance: "+money(due);
+   values.append(amounts,balance);
+   row.append(title,detail,values);
+   if(l.note){
+    const note=document.createElement("div");
+    note.className="muted";
+    note.textContent=l.note;
+    row.append(note);
+   }
+   const btn=document.createElement("button");
+   btn.className="small";
+   btn.textContent="WhatsApp Reminder";
+   btn.onclick=()=>whatsapp(l);
+   row.append(btn);
+   box.append(row);
+  });
+ }
+}
+
+function renderHistory(){
+ const box=$("history");
+ box.replaceChildren();
+ const records=monthRecords().slice().sort((a,b)=>b.date.localeCompare(a.date));
+
+ if(!records.length){
+  box.textContent="No transactions this month.";
+  return;
+ }
+
+ records.forEach(t=>{
+  const row=document.createElement("div");
+  row.className="item";
+  const info=document.createElement("div");
+  const title=document.createElement("strong");
+  title.textContent=t.description;
+  const detail=document.createElement("div");
+  detail.className="muted";
+  detail.textContent=t.date+" | "+t.category+" | "+t.family+" | "+t.account;
+  info.append(title,detail);
+
+  const right=document.createElement("div");
+  right.style.textAlign="right";
+  const value=document.createElement("strong");
+  value.className=t.type==="income"?"green":t.type==="sip"?"blue":"red";
+  value.textContent=(t.type==="income"?"+":"-")+money(t.amount);
+  const del=document.createElement("button");
+  del.className="small redbtn";
+  del.textContent="Delete";
+  del.onclick=()=>{
+   if(confirm("Delete this transaction?")){
+    db.transactions=db.transactions.filter(x=>x.id!==t.id);
+    save();render();
+   }
+  };
+  right.append(value,del);
+  row.append(info,right);
+  box.append(row);
+ });
+}
+
+function renderDashboard(){
+ const arr=monthRecords();
+ const total=(type)=>arr.filter(t=>t.type===type).reduce((s,t)=>s+t.amount,0);
+ const inc=total("income");
+ const exp=total("expense")+total("emi");
+ const sip=total("sip");
+
+ $("income").textContent=money(inc);
+ $("expenses").textContent=money(exp);
+ $("sip").textContent=money(sip);
+ $("savings").textContent=money(inc-exp-sip);
+
+ $("receive").textContent=money(
+  db.loans.filter(l=>l.direction==="give").reduce((s,l)=>s+loanDue(l),0)
+ );
+ $("pay").textContent=money(
+  db.loans.filter(l=>l.direction==="take").reduce((s,l)=>s+loanDue(l),0)
+ );
+
+ const cardExpense=db.transactions
+  .filter(t=>t.account==="Credit Card" && t.type==="expense")
+  .reduce((s,t)=>s+t.amount,0);
+ const cardPaid=db.cardPayments.reduce((s,p)=>s+p.amount,0);
+
+ $("cardExpense").textContent=money(cardExpense);
+ $("cardPaid").textContent=money(cardPaid);
+ $("cardDue").textContent=money(Math.max(0,cardExpense-cardPaid));
+}
+
+function reportBox(id,rows){
+ const box=$(id);
+ box.replaceChildren();
+ if(!rows.length){
+  box.textContent="No data.";
+  return;
+ }
+ rows.forEach(([name,value])=>{
+  const row=document.createElement("div");
+  row.className="row item";
+  const a=document.createElement("span");
+  a.textContent=name;
+  const b=document.createElement("strong");
+  b.textContent=money(value);
+  row.append(a,b);
+  box.append(row);
+ });
+}
+
+function renderReports(){
+ const arr=monthRecords();
+ const expenseRows=arr.filter(t=>t.type==="expense"||t.type==="emi");
+
+ const familyNames=["Wife","Children","Mother","Father","Self","Home / Family"];
+ reportBox("familyReport",familyNames.map(n=>[
+  n,expenseRows.filter(t=>t.family===n).reduce((s,t)=>s+t.amount,0)
+ ]));
+
+ const categories={};
+ expenseRows.forEach(t=>{
+  categories[t.category]=(categories[t.category]||0)+t.amount;
+ });
+ reportBox("categoryReport",Object.entries(categories).sort((a,b)=>b[1]-a[1]));
+
+ const accounts={};
+ arr.forEach(t=>{
+  accounts[t.account]=(accounts[t.account]||0)+t.amount;
+ });
+ db.cardPayments.filter(p=>p.date.startsWith($("month").value)).forEach(p=>{
+  accounts[p.account]=(accounts[p.account]||0)+p.amount;
+ });
+ reportBox("accountReport",Object.entries(accounts));
+
+ const income=arr.filter(t=>t.type==="income").reduce((s,t)=>s+t.amount,0);
+ const expenses=expenseRows.reduce((s,t)=>s+t.amount,0);
+ const sip=arr.filter(t=>t.type==="sip").reduce((s,t)=>s+t.amount,0);
+ $("monthlyReport").textContent=
+  "Income: "+money(income)+" | Expenses: "+money(expenses)+
+  " | SIP: "+money(sip)+" | Savings after SIP: "+money(income-expenses-sip);
+}
+
+function render(){
+ renderDashboard();
+ renderHistory();
+ renderLoans();
+ renderReports();
+}
+
+function backupData(){
+ const data={
+  app:"My Finance V2.0",
+  version:2,
+  createdAt:new Date().toISOString(),
+  data:db
+ };
+ const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement("a");
+ a.href=url;
+ a.download="MyFinanceV2-Backup-"+today()+".json";
+ document.body.appendChild(a);
+ a.click();
+ a.remove()
+setTimeout(()=>URL.revokeObjectURL(url),1500);
+}
+
+function validBackup(d){
+ return d && Array.isArray(d.transactions) &&
+  Array.isArray(d.loans) &&
+  Array.isArray(d.payments) &&
+  Array.isArray(d.cardPayments) &&
+  d.transactions.every(t=>
+   t && typeof t.id==="string" &&
+   ["income","expense","sip","emi"].includes(t.type) &&
+   typeof t.date==="string" &&
+   Number.isFinite(t.amount) && t.amount>0 &&
+   typeof t.description==="string"
+  ) &&
+  d.loans.every(l=>
+   l && typeof l.id==="string" &&
+   ["give","take"].includes(l.direction) &&
+   typeof l.person==="string" &&
+   Number.isFinite(l.amount) && l.amount>0
+  ) &&
+  d.payments.every(p=>
+   p && typeof p.loanId==="string" &&
+   Number.isFinite(p.amount) && p.amount>0
+  ) &&
+  d.cardPayments.every(p=>
+   p && typeof p.id==="string" &&
+   Number.isFinite(p.amount) && p.amount>0
+  );
+}
+
+function restoreData(){
+ const file=$("restoreFile").files[0];
+
+ if(!file){
+  alert("Please select a backup file.");
+  return;
+ }
+
+ const reader=new FileReader();
+
+ reader.onload=e=>{
+  try{
+   const obj=JSON.parse(e.target.result);
+   const data=obj.data||obj;
+
+   if(!validBackup(data)){
+    throw new Error("Invalid file");
+   }
+
+   if(!confirm("Replace current data with backup? Download current backup first if needed.")){
+    return;
+   }
+
+   db=data;
+
+   if(save()){
+    render();
+    alert("Backup restored successfully!");
+   }
+
+  }catch(err){
+   alert("Invalid or unsupported backup file.");
+  }
+ };
+
+ reader.readAsText(file);
+}
+
+function openDrive(){
+ window.open("https://drive.google.com/drive/my-drive","_blank");
+}
+
+function clearData(){
+
+ if(!confirm("All Finance data will be permanently deleted. Continue?")){
+  return;
+ }
+
+ if(!confirm("Have you downloaded your backup?")){
+  return;
+ }
+
+ db={
+  transactions:[],
+  loans:[],
+  payments:[],
+  cardPayments:[]
+ };
+
+ save();
+ render();
+
+ alert("App data cleared.");
+}
+
+$("month").value=today().slice(0,7);
+$("date").value=today();
+$("loanDate").value=today();
+$("settleDate").value=today();
+
+$("month").addEventListener("change",render);
+
+load();
+render();
+
+</script>
+
+</body>
+</html>
