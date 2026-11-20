@@ -1,0 +1,18 @@
+MY FINANCE APP V4.0 — Android install fix
+
+Upload/replace these files in the ROOT of GitHub repository my-finance-app:
+- manifest.json (replace existing)
+- sw.js (replace existing)
+- icon-192.png (new)
+- icon-512.png (new)
+
+Do NOT replace index.html again. Do NOT delete README.md.
+On GitHub: repository > Add file > Upload files > choose the 4 files above > Commit changes.
+
+Then wait 2-5 minutes. Open https://radheyshyamyogi-cmyk.github.io/my-finance-app/ in Chrome.
+Open Chrome Settings > Site settings > Storage (or site info) and clear ONLY cached site files if needed; do not clear all browser data because local Finance records may be stored there.
+Close the tab, reopen the site, then Chrome menu > Install app. If still unavailable, use Create shortcut as a temporary home-screen link.
+
+The manifest now has valid 192x192 and 512x512 PNG icons, app scope/start URL for GitHub Pages, and the service worker cache includes these assets.
+Data remains in this device's browser local storage. Download a JSON backup before clearing site storage.
+This is a PWA install, not a standalone APK.
