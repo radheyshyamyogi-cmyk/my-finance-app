@@ -1,0 +1,9 @@
+{
+  "name": "My Finance App",
+  "short_name": "My Finance",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f3f6fb",
+  "theme_color": "#123b6d",
+  "description": "Personal Finance Manager"
+}
