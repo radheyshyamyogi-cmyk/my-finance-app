@@ -806,3 +806,89 @@ render();
 
 </body>
 </html>
+a.remove();
+
+ URL.revokeObjectURL(url);
+}
+
+function restoreData(){
+ const file=$("restoreFile").files[0];
+ if(!file){
+  alert("पहले JSON Backup File चुनें।");
+  return;
+ }
+
+ const reader=new FileReader();
+
+ reader.onload=function(){
+  try{
+   const backup=JSON.parse(reader.result);
+   const d=backup.data || backup;
+
+   if(!d ||
+      !Array.isArray(d.transactions) ||
+      !Array.isArray(d.loans) ||
+      !Array.isArray(d.payments) ||
+      !Array.isArray(d.cardPayments)){
+    throw new Error("Invalid backup format");
+   }
+
+   if(!confirm("पुराना डेटा बदलकर Backup Restore करना है?")){
+    return;
+   }
+
+   db=d;
+
+   if(save()){
+    render();
+    alert("Backup Successfully Restored!");
+   }
+  }catch(e){
+   alert("Invalid Backup File. Restore नहीं हुआ।");
+  }
+ };
+
+ reader.onerror=function(){
+  alert("File पढ़ने में समस्या हुई।");
+ };
+
+ reader.readAsText(file);
+}
+
+function openDrive(){
+ window.open("https://drive.google.com/drive/my-drive","_blank");
+}
+
+function clearData(){
+ if(!confirm("क्या आप सभी Finance Data Delete करना चाहते हैं?")){
+  return;
+ }
+
+ if(!confirm("यह कार्रवाई वापस नहीं होगी। क्या आप निश्चित हैं?")){
+  return;
+ }
+
+ localStorage.removeItem(KEY);
+
+ db={
+  transactions:[],
+  loans:[],
+  payments:[],
+  cardPayments:[]
+ };
+
+ render();
+ alert("All App Data Deleted.");
+}
+
+$("month").value=today().slice(0,7);
+$("date").value=today();
+$("loanDate").value=today();
+$("settleDate").value=today();
+
+load();
+render();
+
+</script>
+</body>
+</html>
