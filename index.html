@@ -1,191 +1,116 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="hi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#173b67">
-<title>My Finance V3.0</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#123b6d"><title>My Finance App V4.0</title>
+<link rel="manifest" href="manifest.json">
 <style>
-*{box-sizing:border-box}body{margin:0;background:#f1f4f9;color:#172033;font-family:Arial,sans-serif}
-header{background:#173b67;color:white;padding:20px 17px}header h1{font-size:24px;margin:0 0 5px}header p{margin:0;color:#dce8f5}
-main{max-width:850px;margin:auto;padding:13px}.card,.stat{background:white;border-radius:15px;box-shadow:0 3px 14px #0000000b}
-.card{padding:16px;margin-bottom:13px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.stat{padding:15px;min-width:0}
-.stat small{color:#687487}.stat strong{display:block;font-size:22px;margin-top:8px;overflow-wrap:anywhere}
-.green{color:#16845b}.red{color:#d54444}.blue{color:#2768bd}h2{font-size:19px;margin:3px 0 15px}
-label{display:block;font-size:14px;margin:11px 0 5px;color:#46536a}
-input,select{width:100%;padding:12px;border:1px solid #d4dce8;border-radius:9px;background:white;font-size:15px;color:#172033;min-height:44px}
-button{border:0;border-radius:9px;padding:12px 14px;background:#173b67;color:white;font-size:14px;font-weight:bold;cursor:pointer;margin-top:8px}
-button.full{width:100%}button.greenbtn{background:#16845b}button.redbtn{background:#d54444}button.graybtn{background:#e8eef7;color:#173b67}button.small{padding:7px 9px;font-size:12px;margin:4px 2px}
-.tabs{display:flex;gap:7px;overflow-x:auto;padding:2px 0 9px;margin-bottom:5px}.tabs button{white-space:nowrap;margin:0;flex:0 0 auto}.tabs button.active{background:#16845b}
-.hidden{display:none!important}.row{display:flex;justify-content:space-between;align-items:center;gap:9px}.item{padding:12px 0;border-bottom:1px solid #e7ecf3}
-.item:last-child{border-bottom:0}.muted{color:#748096;font-size:12px;line-height:1.5}.pill{font-size:11px;padding:4px 8px;border-radius:20px;background:#edf1f7;color:#33445d}
-.empty{color:#748096;padding:10px 0}.actions{display:flex;flex-wrap:wrap;gap:5px}.note{background:#f5f8fc;border-radius:9px;padding:10px;color:#59677c;font-size:12px;line-height:1.5}
-footer{text-align:center;color:#748096;padding:20px;font-size:12px}@media(min-width:650px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}main{padding:20px}}
-</style>
-</head>
+:root{--navy:#123b6d;--blue:#1769aa;--bg:#f3f6fb;--card:#fff;--text:#172334;--muted:#68778a;--line:#e4eaf1;--green:#14804a;--red:#c43d3d}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{background:linear-gradient(120deg,#102e53,#1769aa);color:white;padding:18px 16px 22px;position:sticky;top:0;z-index:5}
+header h1{font-size:20px;margin:0}header p{margin:4px 0 0;color:#d9e8f8;font-size:12px}
+.wrap{max-width:1100px;margin:auto;padding:14px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.stat,.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:0 2px 8px #163b6508}
+.stat small{display:block;color:var(--muted)}.stat b{font-size:20px;display:block;margin-top:5px}
+nav{display:flex;gap:7px;overflow:auto;padding:12px 0;position:sticky;top:75px;background:var(--bg);z-index:4}
+nav button,.btn{border:0;border-radius:9px;padding:10px 13px;background:#e4edf7;color:#173b60;font-weight:650;white-space:nowrap}
+nav button.active,.btn.primary{background:var(--navy);color:white}
+.btn.danger{background:#fff0f0;color:#a52828}.btn.light{background:#edf2f7}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.panel h2{font-size:16px;margin:0 0 12px}
+label{display:block;font-size:12px;color:var(--muted);margin:9px 0 4px}
+input,select,textarea{width:100%;padding:11px;border:1px solid #d6e0eb;border-radius:9px;background:white;color:var(--text);font:inherit}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:10px 7px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--muted);font-weight:650}
+.tablewrap{overflow:auto}.muted{color:var(--muted)}.positive{color:var(--green)}.negative{color:var(--red)}
+.hidden{display:none!important}.pill{display:inline-block;padding:3px 8px;border-radius:20px;background:#edf3fa;font-size:11px}
+.section{display:none}.section.active{display:block}.empty{text-align:center;color:var(--muted);padding:20px}
+footer{text-align:center;color:var(--muted);font-size:11px;padding:25px}
+@media(max-width:700px){.stats{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}nav{top:72px}.stat b{font-size:18px}.wrap{padding:10px}}
+</style></head>
 <body>
-<header><h1>💰 My Finance V3.0</h1><p>Family & Personal Finance Manager</p></header>
-<main>
-<div class="card"><label for="month">Monthly Report</label><input type="month" id="month"></div>
-<div class="grid">
-<div class="stat"><small>Monthly Income</small><strong class="green" id="income">₹0</strong></div>
-<div class="stat"><small>Monthly Expenses</small><strong class="red" id="expenses">₹0</strong></div>
-<div class="stat"><small>Monthly Savings*</small><strong class="blue" id="savings">₹0</strong></div>
-<div class="stat"><small>SIP Investment</small><strong id="sip">₹0</strong></div>
-<div class="stat"><small>Money to Receive</small><strong class="green" id="receive">₹0</strong></div>
-<div class="stat"><small>Money to Pay</small><strong class="red" id="pay">₹0</strong></div>
+<header><h1>My Finance App <span style="font-size:12px">V4.0</span></h1><p>Personal Finance Manager · आपका डेटा इसी डिवाइस में सेव होता है</p></header>
+<div class="wrap">
+<div class="stats">
+ <div class="stat"><small>कुल आय</small><b id="sIncome">₹0</b></div>
+ <div class="stat"><small>कुल खर्च</small><b id="sExpense">₹0</b></div>
+ <div class="stat"><small>बचत</small><b id="sSaving">₹0</b></div>
+ <div class="stat"><small>नेट वर्थ (अनुमान)</small><b id="sNet">₹0</b></div>
 </div>
-<p class="muted">*Savings = Income − Expenses − SIP. यह वास्तविक बैंक बैलेंस नहीं है।</p>
-<nav class="tabs">
-<button class="active" onclick="showTab('transactions',this)">Transactions</button>
-<button onclick="showTab('loans',this)">Udhar</button>
-<button onclick="showTab('reports',this)">Reports</button>
-<button onclick="showTab('backup',this)">Backup</button>
+<nav id="tabs">
+<button class="active" data-tab="dashboard">डैशबोर्ड</button><button data-tab="transactions">लेन-देन</button><button data-tab="accounts">बैंक/कार्ड</button><button data-tab="loans">लोन/EMI</button><button data-tab="investments">SIP/LIC</button><button data-tab="assets">वाहन/संपत्ति</button><button data-tab="budget">बजट</button><button data-tab="backup">बैकअप</button>
 </nav>
-
-<section id="transactions">
-<div class="card"><h2>➕ Add Income / Expense</h2>
-<label>Transaction Type</label><select id="type"><option value="income">Income</option><option value="expense">Expense</option><option value="sip">Mutual Fund SIP</option><option value="emi">Loan EMI</option><option value="cardpayment">Credit Card Bill Payment</option></select>
-<label>Date</label><input type="date" id="date">
-<label>Category</label><select id="category">
-<option>Salary</option><option>Business Income</option><option>Bank Interest</option><option>Other Income</option>
-<option>School Fees</option><option>Children Clothes</option><option>Children Shopping</option><option>Children Other</option>
-<option>Wife Expenses</option><option>Cash Given to Wife</option><option>Mother Expenses</option><option>Father Expenses</option>
-<option>Personal Clothes</option><option>Personal Shopping</option><option>Personal Expenses</option><option>Room Expenses</option>
-<option>Household Expenses</option><option>Rent</option><option>Food / Grocery</option><option>Medical</option>
-<option>Electricity / Bills</option><option>Travel</option><option>Insurance / LIC</option><option>Loan EMI</option>
-<option>Mutual Fund SIP</option><option>Credit Card Payment</option><option>Other Expense</option></select>
-<label>Family Member</label><select id="family"><option>Self</option><option>Wife</option><option>Children</option><option>Mother</option><option>Father</option><option>Home / Family</option></select>
-<label>Payment Account / Received In</label><select id="account"><option>Cash</option><option>Saving Account</option><option>PhonePe / UPI</option><option>Credit Card</option></select>
-<label>Description</label><input id="description" maxlength="120" placeholder="Details लिखें">
-<label>Amount (₹)</label><input id="amount" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="Amount">
-<input type="hidden" id="editId">
-<button class="full greenbtn" id="saveTransactionBtn" onclick="addTransaction()">Save Transaction</button>
-<button class="full graybtn hidden" id="cancelEditBtn" onclick="cancelEdit()">Cancel Edit</button>
+<section id="dashboard" class="section active">
+ <div class="grid">
+  <div class="panel"><h2>इस महीने का सारांश</h2><div id="monthSummary" class="muted">लोड हो रहा है…</div></div>
+  <div class="panel"><h2>त्वरित जोड़ें</h2><div class="row"><div><label>प्रकार</label><select id="quickType"><option value="income">आय</option><option value="expense">खर्च</option></select></div><div><label>राशि (₹)</label><input id="quickAmount" type="number" min="0" placeholder="राशि"></div></div><label>विवरण</label><input id="quickNote" placeholder="जैसे Salary / Grocery"><div class="actions"><button class="btn primary" onclick="quickAdd()">सेव करें</button></div></div>
+ </div>
+ <div class="panel" style="margin-top:12px"><h2>हाल के लेन-देन</h2><div id="recent"></div></div>
+</section>
+<section id="transactions" class="section">
+ <div class="grid"><div class="panel"><h2>नया लेन-देन</h2>
+ <div class="row"><div><label>प्रकार</label><select id="txType"><option value="income">आय</option><option value="expense">खर्च</option><option value="transfer">अपने खातों में ट्रांसफर</option></select></div><div><label>तारीख</label><input id="txDate" type="date"></div></div>
+ <label>विवरण</label><input id="txNote" placeholder="वेतन, किराया, UPI आदि">
+ <div class="row"><div><label>राशि (₹)</label><input id="txAmount" type="number" min="0"></div><div><label>कैटेगरी</label><select id="txCategory"><option>Salary</option><option>Food</option><option>Rent</option><option>School Fees</option><option>Shopping</option><option>Medical</option><option>Travel</option><option>EMI</option><option>UPI</option><option>Cash</option><option>Other</option></select></div></div>
+ <label>बैंक/पेमेंट माध्यम</label><select id="txAccount"><option value="">नकद / निर्दिष्ट नहीं</option></select>
+ <div id="transferFields" class="hidden"><label>किस खाते में भेजें</label><select id="txToAccount"></select></div>
+ <div class="actions"><button class="btn primary" onclick="addTransaction()">लेन-देन सेव करें</button></div></div>
+ <div class="panel"><h2>फिल्टर</h2><label>महीना</label><input id="filterMonth" type="month" onchange="renderTransactions()"><label>प्रकार</label><select id="filterType" onchange="renderTransactions()"><option value="">सभी</option><option value="income">आय</option><option value="expense">खर्च</option><option value="transfer">ट्रांसफर</option></select><p class="muted">ट्रांसफर को आय/खर्च में नहीं गिना जाता।</p></div></div>
+ <div class="panel" style="margin-top:12px"><h2>लेन-देन सूची</h2><div id="transactionsTable"></div></div>
+</section>
+<section id="accounts" class="section"><div class="grid"><div class="panel"><h2>बैंक / कार्ड जोड़ें</h2><label>नाम</label><input id="accName" placeholder="HDFC Bank / SBI / Axis Credit Card"><div class="row"><div><label>प्रकार</label><select id="accType"><option>Bank</option><option>Cash</option><option>Credit Card</option><option>Other</option></select></div><div><label>शुरुआती बैलेंस (₹)</label><input id="accBalance" type="number" value="0"></div></div><div class="actions"><button class="btn primary" onclick="addAccount()">खाता जोड़ें</button></div></div><div class="panel"><h2>खातों का सारांश</h2><div id="accountSummary"></div></div></div><div class="panel" style="margin-top:12px"><h2>आपके खाते</h2><div id="accountsTable"></div></div></section>
+<section id="loans" class="section"><div class="grid"><div class="panel"><h2>लोन जोड़ें</h2><label>लोन का नाम</label><input id="loanName" placeholder="Car Loan / Personal Loan"><div class="row"><div><label>मूल लोन (₹)</label><input id="loanPrincipal" type="number"></div><div><label>वार्षिक ब्याज (%)</label><input id="loanRate" type="number" step=".01"></div></div><div class="row"><div><label>अवधि (महीने)</label><input id="loanMonths" type="number"></div><div><label>EMI तारीख (हर महीने)</label><input id="loanDay" type="number" min="1" max="31" value="5"></div></div><label>पहली EMI तारीख</label><input id="loanStart" type="date"><div class="actions"><button class="btn primary" onclick="addLoan()">लोन सेव करें</button></div></div><div class="panel"><h2>लोन जानकारी</h2><p class="muted">EMI अनुमान reducing-balance पद्धति से है। वास्तविक बैंक स्टेटमेंट से मिलान करें।</p><div id="loanSummary"></div></div></div><div class="panel" style="margin-top:12px"><h2>लोन सूची और भुगतान</h2><div id="loansTable"></div></div></section>
+<section id="investments" class="section"><div class="grid"><div class="panel"><h2>SIP / निवेश जोड़ें</h2><label>फंड / निवेश नाम</label><input id="sipName" placeholder="Mutual Fund SIP"><div class="row"><div><label>मासिक निवेश (₹)</label><input id="sipAmount" type="number"></div><div><label>वर्तमान मूल्य (₹)</label><input id="sipValue" type="number"></div></div><div class="actions"><button class="btn primary" onclick="addSip()">निवेश जोड़ें</button></div></div><div class="panel"><h2>LIC / बीमा पॉलिसी जोड़ें</h2><label>पॉलिसी नाम / नंबर (संक्षिप्त)</label><input id="licName" placeholder="LIC Policy"><div class="row"><div><label>वार्षिक प्रीमियम (₹)</label><input id="licPremium" type="number"></div><div><label>अगली भुगतान तारीख</label><input id="licDate" type="date"></div></div><div class="actions"><button class="btn primary" onclick="addLic()">पॉलिसी जोड़ें</button></div></div></div><div class="panel" style="margin-top:12px"><h2>निवेश और पॉलिसी</h2><div id="investmentList"></div></div></section>
+<section id="assets" class="section"><div class="grid"><div class="panel"><h2>वाहन / संपत्ति जोड़ें</h2><label>नाम</label><input id="assetName" placeholder="Car / Bike / Property"><div class="row"><div><label>वर्तमान अनुमानित मूल्य (₹)</label><input id="assetValue" type="number"></div><div><label>कैटेगरी</label><select id="assetType"><option>Car</option><option>Bike</option><option>Property</option><option>Other</option></select></div></div><div class="actions"><button class="btn primary" onclick="addAsset()">संपत्ति जोड़ें</button></div></div><div class="panel"><h2>नेट वर्थ का तरीका</h2><p class="muted">बैंक बैलेंस + निवेश + संपत्ति − बकाया लोन − क्रेडिट कार्ड बकाया। यह अनुमान है।</p></div></div><div class="panel" style="margin-top:12px"><h2>संपत्ति सूची</h2><div id="assetsTable"></div></div></section>
+<section id="budget" class="section"><div class="grid"><div class="panel"><h2>मासिक बजट सेट करें</h2><label>कैटेगरी</label><input id="budgetCategory" placeholder="Food / Rent / Travel"><label>मासिक सीमा (₹)</label><input id="budgetLimit" type="number"><div class="actions"><button class="btn primary" onclick="addBudget()">बजट सेव करें</button></div></div><div class="panel"><h2>इस महीने का बजट उपयोग</h2><div id="budgetSummary"></div></div></div><div class="panel" style="margin-top:12px"><h2>बजट सूची</h2><div id="budgetTable"></div></div></section>
+<section id="backup" class="section"><div class="grid"><div class="panel"><h2>डेटा बैकअप</h2><p>अपने सभी रिकॉर्ड JSON फाइल में डाउनलोड करें। इसे सुरक्षित जगह रखें।</p><div class="actions"><button class="btn primary" onclick="downloadBackup()">Backup Download</button><label class="btn light" style="margin:0">Restore JSON<input type="file" accept=".json,application/json" onchange="restoreBackup(event)" hidden></label></div></div><div class="panel"><h2>डेटा सुरक्षा</h2><p class="muted">डेटा इस ब्राउज़र/डिवाइस के Local Storage में रहता है। ऐप का डेटा साफ करने या ब्राउज़र बदलने पर रिकॉर्ड मिट सकते हैं। नियमित बैकअप डाउनलोड करें। Google Drive/Gmail automatic backup अभी इस पैकेज में सक्रिय नहीं है।</p><button class="btn danger" onclick="resetApp()">सारा डेटा मिटाएँ</button></div></div></section>
+<footer>My Finance App V4.0 · Personal use · Trading Alert App से अलग</footer>
 </div>
-<div class="card"><h2>💳 Credit Card Summary</h2>
-<div class="row item"><span>Card Expenses</span><strong id="cardExpense">₹0</strong></div>
-<div class="row item"><span>Bill Payments</span><strong id="cardPaid">₹0</strong></div>
-<div class="row"><span>Outstanding Bill</span><strong class="red" id="cardDue">₹0</strong></div>
-<p class="muted">Credit Card से किए गए खर्च और बिल भुगतान अलग रखे जाते हैं।</p></div>
-<div class="card"><div class="row"><h2>📋 Transaction History</h2><span class="pill" id="transactionCount">0 records</span></div><div id="history" class="empty">No transactions this month.</div></div>
-</section>
-
-<section id="loans" class="hidden">
-<div class="card"><h2>🤝 Add Udhar Record</h2>
-<label>Transaction</label><select id="loanType"><option value="give">किसी को उधार दिया (मुझे वापस लेना है)</option><option value="take">किसी से उधार लिया (मुझे वापस देना है)</option></select>
-<label>Person Name</label><input id="person" maxlength="80" placeholder="नाम लिखें">
-<label>WhatsApp Mobile Number</label><input id="phone" type="tel" placeholder="91XXXXXXXXXX">
-<label>Transaction Date</label><input type="date" id="loanDate">
-<label>Due Date (optional)</label><input type="date" id="dueDate">
-<label>Account</label><select id="loanAccount"><option>Cash</option><option>Saving Account</option><option>PhonePe / UPI</option></select>
-<label>Amount (₹)</label><input type="number" id="loanAmount" min="0.01" step="0.01" inputmode="decimal" placeholder="Amount">
-<label>Details</label><input id="loanNote" maxlength="120" placeholder="किस काम के लिए">
-<button class="full greenbtn" onclick="addLoan()">Save Udhar Record</button></div>
-<div class="card"><h2>💰 Partial Payment / Recovery</h2>
-<label>Select Person / Loan</label><select id="settleLoan"></select>
-<label>Payment Date</label><input type="date" id="settleDate">
-<label>Payment Account</label><select id="settleAccount"><option>Cash</option><option>Saving Account</option><option>PhonePe / UPI</option></select>
-<label>Payment Amount (₹)</label><input type="number" id="settleAmount" min="0.01" step="0.01" inputmode="decimal" placeholder="Amount">
-<button class="full" onclick="settleLoanPayment()">Save Partial / Full Payment</button></div>
-<div class="card"><h2>📒 Udhar Register</h2><div id="loanHistory" class="empty">No loan records.</div></div>
-</section>
-
-<section id="reports" class="hidden">
-<div class="card"><h2>📊 Family-wise Expenses</h2><div id="familyReport"></div></div>
-<div class="card"><h2>📁 Category-wise Expenses</h2><div id="categoryReport"></div></div>
-<div class="card"><h2>💵 Account-wise Activity</h2><div id="accountReport"></div></div>
-<div class="card"><h2>📈 Monthly Summary</h2><div id="monthlyReport"></div></div>
-<div class="card"><h2>⬇️ Export Monthly Transactions</h2><p class="muted">Selected month के transactions CSV में डाउनलोड करें, जिसे Excel में खोल सकते हैं।</p><button class="full" onclick="exportCSV()">Download Excel-compatible CSV</button></div>
-</section>
-
-<section id="backup" class="hidden">
-<div class="card"><h2>☁️ Backup & Restore</h2><p class="muted">JSON backup में transactions, udhar और partial payments सुरक्षित होंगे।</p>
-<button class="full greenbtn" onclick="backupData()">Download Complete Backup</button>
-<label>Restore Backup File</label><input type="file" id="restoreFile" accept=".json,application/json">
-<button class="full graybtn" onclick="restoreData()">Restore Data</button><button class="full graybtn" onclick="openDrive()">Open Google Drive</button>
-<p class="muted">Backup डाउनलोड करके Google Drive में upload करें। App खुद Drive sync नहीं करता।</p></div>
-<div class="card"><h2>🔒 Data & Privacy</h2><p class="note">डेटा इसी Browser/WebView के Local Storage में सेव होता है। यह encrypted नहीं है। Browser storage साफ होने पर data मिट सकता है। नियमित backup रखें।</p><button class="full redbtn" onclick="clearData()">Delete All App Data</button></div>
-</section>
-</main><footer>My Finance V3.0 | Personal Use</footer>
-
 <script>
-"use strict";
-const KEY="myFinanceV2Data";
-let db={transactions:[],loans:[],payments:[],cardPayments:[]};
-const $=id=>document.getElementById(id);
-function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,9)}
-function today(){const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
-function money(n){return "₹"+Number(n||0).toLocaleString("en-IN",{maximumFractionDigits:2})}
-function validAmount(n){return Number.isFinite(n)&&n>0}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(db));return true}catch(e){alert("Storage error. Backup डाउनलोड करें।");return false}}
-function load(){try{const raw=localStorage.getItem(KEY);if(!raw)return;const d=JSON.parse(raw);if(d&&Array.isArray(d.transactions)&&Array.isArray(d.loans)){db={transactions:d.transactions,loans:d.loans,payments:Array.isArray(d.payments)?d.payments:[],cardPayments:Array.isArray(d.cardPayments)?d.cardPayments:[]}}else alert("Saved data format सही नहीं है।")}catch(e){alert("Saved data पढ़ा नहीं जा सका। Browser data clear न करें।")}}
-function showTab(id,btn){document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));$(id).classList.remove("hidden");document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active"));btn.classList.add("active");render()}
-function monthRecords(){return db.transactions.filter(t=>String(t.date||"").startsWith($("month").value))}
-function loanPaid(l){return db.payments.filter(p=>p.loanId===l.id).reduce((s,p)=>s+Number(p.amount||0),0)}
-function loanDue(l){return Math.max(0,Number(l.amount||0)-loanPaid(l))}
-function addTransaction(){
- const type=$("type").value,date=$("date").value,category=$("category").value,family=$("family").value,account=$("account").value,description=$("description").value.trim(),amount=Number($("amount").value),editId=$("editId").value;
- if(!date||!description||!validAmount(amount)){alert("Date, Description और सही Amount भरें।");return}
- if(type==="cardpayment"){if(account==="Credit Card"){alert("Bill Payment के लिए Cash, Saving Account या PhonePe चुनें।");return}if(editId){alert("Card payment को edit करने की सुविधा उपलब्ध नहीं है।");return}db.cardPayments.push({id:uid(),date,account,amount,description})}
- else{if((type==="income"||type==="sip")&&account==="Credit Card"){alert("Income/SIP के लिए Credit Card account न चुनें।");return}const rec={id:editId||uid(),type,date,category,family,account,description,amount};if(editId){const i=db.transactions.findIndex(t=>t.id===editId);if(i<0){alert("Transaction नहीं मिला।");return}db.transactions[i]=rec}else db.transactions.push(rec)}
- if(!save())return;cancelEdit();$("description").value="";$("amount").value="";render();alert(editId?"Transaction updated.":"Transaction saved successfully!")
-}
-function editTransaction(id){const t=db.transactions.find(x=>x.id===id);if(!t)return;$("type").value=t.type;$("date").value=t.date;$("category").value=t.category;$("family").value=t.family;$("account").value=t.account;$("description").value=t.description;$("amount").value=t.amount;$("editId").value=t.id;$("saveTransactionBtn").textContent="Update Transaction";$("cancelEditBtn").classList.remove("hidden");$("transactions").scrollIntoView({behavior:"smooth"})}
-function cancelEdit(){$("editId").value="";$("saveTransactionBtn").textContent="Save Transaction";$("cancelEditBtn").classList.add("hidden")}
-function deleteTransaction(id){if(!confirm("क्या यह transaction delete करना है?"))return;db.transactions=db.transactions.filter(t=>t.id!==id);if(save())render()}
-function addLoan(){
- const direction=$("loanType").value,person=$("person").value.trim(),phone=$("phone").value.trim(),date=$("loanDate").value,dueDate=$("dueDate").value,account=$("loanAccount").value,amount=Number($("loanAmount").value),note=$("loanNote").value.trim();
- if(!person||!date||!validAmount(amount)){alert("Person Name, Date और सही Amount भरें।");return}
- if(phone&&!/^[0-9+\s-]{8,16}$/.test(phone)){alert("Mobile Number सही दर्ज करें।");return}
- db.loans.push({id:uid(),direction,person,phone,date,dueDate,account,amount,note});if(!save())return;
- $("person").value="";$("phone").value="";$("loanAmount").value="";$("loanNote").value="";$("dueDate").value="";render();alert("Udhar record saved!")
-}
-function settleLoanPayment(){
- const id=$("settleLoan").value,l=db.loans.find(x=>x.id===id),date=$("settleDate").value,account=$("settleAccount").value,amount=Number($("settleAmount").value);
- if(!l||!date||!validAmount(amount)){alert("Loan, Date और Amount भरें।");return}if(amount>loanDue(l)+0.000001){alert("Payment बाकी उधार से ज्यादा नहीं हो सकता।");return}
- db.payments.push({id:uid(),loanId:id,date,account,amount});if(!save())return;$("settleAmount").value="";render();alert("Payment saved!")
-}
-function whatsapp(l){const due=loanDue(l);if(due<=0){alert("पूरा भुगतान हो चुका है।");return}const phone=String(l.phone||"").replace(/\D/g,""),paid=loanPaid(l);const msg=l.direction==="give"?"Namaste "+l.person+" ji, aapko "+money(l.amount)+" udhar diye the. Ab tak "+money(paid)+" prapt hue hain. Abhi "+money(due)+" baki hain. Kripya suvidha anusar wapas kar dein. Dhanyavaad.":"Namaste "+l.person+" ji, maine aapse "+money(l.amount)+" udhar liye the. Ab tak "+money(paid)+" wapas kiye hain. Abhi "+money(due)+" baki hain. Dhanyavaad.";window.open("https://wa.me/"+phone+"?text="+encodeURIComponent(msg),"_blank")}
-function deleteLoan(id){if(db.payments.some(p=>p.loanId===id)){alert("इस loan पर payment records हैं, इसलिए सुरक्षित रखने के लिए delete रोक दिया गया है।");return}if(!confirm("यह udhar record delete करें?"))return;db.loans=db.loans.filter(l=>l.id!==id);if(save())render()}
-function renderLoans(){
- const sel=$("settleLoan");sel.replaceChildren();const open=db.loans.filter(l=>loanDue(l)>0);if(!open.length)sel.add(new Option("No pending loans",""));else open.forEach(l=>sel.add(new Option(l.person+" - "+(l.direction==="give"?"Lena hai":"Dena hai")+" - "+money(loanDue(l)),l.id)));
- const box=$("loanHistory");box.replaceChildren();if(!db.loans.length){box.textContent="No loan records.";box.className="empty";return}box.className="";
- db.loans.slice().reverse().forEach(l=>{const row=document.createElement("div");row.className="item";const title=document.createElement("strong");title.textContent=l.person+" - "+(l.direction==="give"?"Mujhe Lena Hai":"Mujhe Dena Hai");const detail=document.createElement("div");detail.className="muted";detail.textContent="Date: "+l.date+" | Due: "+(l.dueDate||"Not set")+" | "+l.account;const vals=document.createElement("div");vals.className="row";const paid=document.createElement("span");paid.textContent="Total: "+money(l.amount)+" | Paid: "+money(loanPaid(l));const bal=document.createElement("strong");bal.className=loanDue(l)?"red":"green";bal.textContent="Balance: "+money(loanDue(l));vals.append(paid,bal);row.append(title,detail,vals);if(l.note){const n=document.createElement("div");n.className="muted";n.textContent=l.note;row.append(n)}const acts=document.createElement("div");acts.className="actions";if(loanDue(l)>0){const w=document.createElement("button");w.className="small";w.textContent="WhatsApp Reminder";w.onclick=()=>whatsapp(l);acts.append(w)}const del=document.createElement("button");del.className="small redbtn";del.textContent="Delete";del.onclick=()=>deleteLoan(l.id);acts.append(del);row.append(acts);box.append(row)})
-}
-function renderHistory(){
- const box=$("history");box.replaceChildren();const list=monthRecords().slice().sort((a,b)=>b.date.localeCompare(a.date));$("transactionCount").textContent=list.length+" records";if(!list.length){box.textContent="No transactions this month.";box.className="empty";return}box.className="";
- list.forEach(t=>{const row=document.createElement("div");row.className="item";const info=document.createElement("div"),name=document.createElement("strong");name.textContent=t.description;const meta=document.createElement("div");meta.className="muted";meta.textContent=t.date+" | "+t.category+" | "+t.family+" | "+t.account;info.append(name,meta);const right=document.createElement("div");right.style.textAlign="right";const val=document.createElement("strong");val.className=t.type==="income"?"green":t.type==="sip"?"blue":"red";val.textContent=(t.type==="income"?"+":"−")+money(t.amount);const actions=document.createElement("div");actions.className="actions";const edit=document.createElement("button");edit.className="small graybtn";edit.textContent="Edit";edit.onclick=()=>editTransaction(t.id);const del=document.createElement("button");del.className="small redbtn";del.textContent="Delete";del.onclick=()=>deleteTransaction(t.id);actions.append(edit,del);right.append(val,actions);row.append(info,right);box.append(row)})
-}
-function renderDashboard(){
- const a=monthRecords(),sum=type=>a.filter(t=>t.type===type).reduce((s,t)=>s+Number(t.amount||0),0),inc=sum("income"),exp=sum("expense")+sum("emi"),sip=sum("sip");
- $("income").textContent=money(inc);$("expenses").textContent=money(exp);$("sip").textContent=money(sip);$("savings").textContent=money(inc-exp-sip);
- $("receive").textContent=money(db.loans.filter(l=>l.direction==="give").reduce((s,l)=>s+loanDue(l),0));$("pay").textContent=money(db.loans.filter(l=>l.direction==="take").reduce((s,l)=>s+loanDue(l),0));
- const ce=db.transactions.filter(t=>t.account==="Credit Card"&&(t.type==="expense"||t.type==="emi")).reduce((s,t)=>s+t.amount,0),cp=db.cardPayments.reduce((s,p)=>s+p.amount,0);
- $("cardExpense").textContent=money(ce);$("cardPaid").textContent=money(cp);$("cardDue").textContent=money(Math.max(0,ce-cp))
-}
-function reportBox(id,rows){const box=$(id);box.replaceChildren();rows=rows.filter(x=>Number(x[1])!==0).sort((a,b)=>b[1]-a[1]);if(!rows.length){box.textContent="No data.";box.className="empty";return}box.className="";rows.forEach(([n,v])=>{const r=document.createElement("div");r.className="row item";const a=document.createElement("span");a.textContent=n;const b=document.createElement("strong");b.textContent=money(v);r.append(a,b);box.append(r)})}
-function renderReports(){
- const a=monthRecords(),ex=a.filter(t=>t.type==="expense"||t.type==="emi"),families=["Self","Wife","Children","Mother","Father","Home / Family"];
- reportBox("familyReport",families.map(n=>[n,ex.filter(t=>t.family===n).reduce((s,t)=>s+t.amount,0)]));
- const cats={};ex.forEach(t=>cats[t.category]=(cats[t.category]||0)+t.amount);reportBox("categoryReport",Object.entries(cats));
- const ac={};a.forEach(t=>ac[t.account]=(ac[t.account]||0)+t.amount);db.cardPayments.filter(p=>String(p.date).startsWith($("month").value)).forEach(p=>ac[p.account]=(ac[p.account]||0)+p.amount);reportBox("accountReport",Object.entries(ac));
- const inc=a.filter(t=>t.type==="income").reduce((s,t)=>s+t.amount,0),expense=ex.reduce((s,t)=>s+t.amount,0),sip=a.filter(t=>t.type==="sip").reduce((s,t)=>s+t.amount,0);
- $("monthlyReport").textContent="Income: "+money(inc)+" | Expenses: "+money(expense)+" | SIP: "+money(sip)+" | Savings after SIP: "+money(inc-expense-sip)
-}
-function render(){renderDashboard();renderHistory();renderLoans();renderReports()}
-function backupData(){const payload={app:"My Finance",version:3,createdAt:new Date().toISOString(),data:db},blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="MyFinance-Backup-"+today()+".json";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
-function restoreData(){
- const file=$("restoreFile").files[0];if(!file){alert("पहले JSON Backup File चुनें।");return}const reader=new FileReader();
- reader.onload=()=>{try{const b=JSON.parse(reader.result),d=b.data||b;if(!d||!Array.isArray(d.transactions)||!Array.isArray(d.loans)||!Array.isArray(d.payments)||!Array.isArray(d.cardPayments))throw Error("Invalid backup");if(!confirm("मौजूदा data को backup से replace करना है? पहले current backup डाउनलोड कर लें।"))return;const old=db;db=d;if(save()){render();alert("Backup successfully restored!")}else db=old}catch(e){alert("Invalid Backup File. Restore नहीं हुआ।")}};
- reader.onerror=()=>alert("File पढ़ने में समस्या हुई।");reader.readAsText(file)
-}
-function openDrive(){window.open("https://drive.google.com/drive/my-drive","_blank")}
-function clearData(){if(!confirm("क्या सभी Finance App Data permanently delete करना चाहते हैं? पहले backup डाउनलोड करें।"))return;localStorage.removeItem(KEY);db={transactions:[],loans:[],payments:[],cardPayments:[]};cancelEdit();render();alert("All App Data Deleted.")}
-function csvCell(v){return '"'+String(v??"").replace(/"/g,'""')+'"'}
-function exportCSV(){const a=monthRecords();if(!a.length){alert("इस महीने export करने के लिए transactions नहीं हैं।");return}const rows=[["Date","Type","Category","Family Member","Account","Description","Amount"],...a.map(t=>[t.date,t.type,t.category,t.family,t.account,t.description,t.amount])],csv="\uFEFF"+rows.map(r=>r.map(csvCell).join(",")).join("\r\n"),blob=new Blob([csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),link=document.createElement("a");link.href=url;link.download="MyFinance-"+$("month").value+".csv";document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
-$("month").value=today().slice(0,7);$("date").value=today();$("loanDate").value=today();$("settleDate").value=today();load();render();
-</script>
-</body>
-</html>
+const KEY='myFinanceV2Data';
+const blank={transactions:[],accounts:[],loans:[],sips:[],lics:[],assets:[],budgets:[]};
+let db;
+try{db=JSON.parse(localStorage.getItem(KEY)||'null')||structuredClone(blank)}catch(e){db=structuredClone(blank)}
+for(const k of Object.keys(blank)) if(!Array.isArray(db[k])) db[k]=[];
+function save(){localStorage.setItem(KEY,JSON.stringify(db));renderAll()}
+function money(n){return '₹'+(Number(n)||0).toLocaleString('en-IN',{maximumFractionDigits:2})}
+function val(id){return document.getElementById(id).value}
+function num(id){return Number(val(id))||0}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function today(){return new Date().toISOString().slice(0,10)}
+document.getElementById('txDate').value=today();
+document.getElementById('tabs').addEventListener('click',e=>{let b=e.target.closest('button[data-tab]');if(!b)return;document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.section').forEach(x=>x.classList.toggle('active',x.id===b.dataset.tab))});
+document.getElementById('txType').addEventListener('change',()=>document.getElementById('transferFields').classList.toggle('hidden',val('txType')!=='transfer'));
+function quickAdd(){let a=num('quickAmount');if(a<=0)return alert('सही राशि भरें');db.transactions.push({id:Date.now(),type:val('quickType'),date:today(),note:val('quickNote')||'Quick entry',amount:a,category:'Other',account:''});document.getElementById('quickAmount').value='';document.getElementById('quickNote').value='';save()}
+function addTransaction(){let a=num('txAmount');if(a<=0)return alert('सही राशि भरें');let t=val('txType');db.transactions.push({id:Date.now(),type:t,date:val('txDate')||today(),note:val('txNote'),amount:a,category:val('txCategory'),account:val('txAccount'),toAccount:t==='transfer'?val('txToAccount'):''});save();['txNote','txAmount'].forEach(x=>document.getElementById(x).value='');alert('लेन-देन सेव हो गया')}
+function addAccount(){let n=val('accName').trim();if(!n)return alert('खाते का नाम लिखें');db.accounts.push({id:Date.now(),name:n,type:val('accType'),opening:num('accBalance')});document.getElementById('accName').value='';save()}
+function addLoan(){let p=num('loanPrincipal'),r=num('loanRate'),m=num('loanMonths');if(!val('loanName').trim()||p<=0||m<=0)return alert('लोन नाम, मूल राशि और अवधि भरें');let mr=r/1200,emi=mr? p*mr*Math.pow(1+mr,m)/(Math.pow(1+mr,m)-1):p/m;db.loans.push({id:Date.now(),name:val('loanName'),principal:p,rate:r,months:m,day:num('loanDay'),start:val('loanStart'),paid:0,emi:emi});save();document.getElementById('loanName').value=''}
+function payLoan(id){let l=db.loans.find(x=>x.id===id);let a=Number(prompt('भुगतान राशि (₹) डालें',l.emi.toFixed(0)));if(a>0){l.paid=(l.paid||0)+a;db.transactions.push({id:Date.now(),type:'expense',date:today(),note:'Loan payment - '+l.name,amount:a,category:'EMI',account:''});save()}}
+function addSip(){if(!val('sipName').trim())return alert('निवेश का नाम लिखें');db.sips.push({id:Date.now(),name:val('sipName'),monthly:num('sipAmount'),value:num('sipValue')});save();document.getElementById('sipName').value=''}
+function addLic(){if(!val('licName').trim())return alert('पॉलिसी का नाम लिखें');db.lics.push({id:Date.now(),name:val('licName'),premium:num('licPremium'),date:val('licDate')});save();document.getElementById('licName').value=''}
+function addAsset(){if(!val('assetName').trim())return alert('संपत्ति का नाम लिखें');db.assets.push({id:Date.now(),name:val('assetName'),value:num('assetValue'),type:val('assetType')});save();document.getElementById('assetName').value=''}
+function addBudget(){if(!val('budgetCategory').trim()||num('budgetLimit')<=0)return alert('कैटेगरी और सीमा भरें');let c=val('budgetCategory').trim();let old=db.budgets.find(x=>x.category.toLowerCase()===c.toLowerCase());if(old)old.limit=num('budgetLimit');else db.budgets.push({id:Date.now(),category:c,limit:num('budgetLimit')});save();document.getElementById('budgetCategory').value=''}
+function delItem(type,id){if(!confirm('क्या आप यह रिकॉर्ड हटाना चाहते हैं?'))return;db[type]=db[type].filter(x=>x.id!==id);save()}
+function table(headers,rows){if(!rows.length)return '<div class="empty">अभी कोई रिकॉर्ड नहीं है</div>';return '<div class="tablewrap"><table><thead><tr>'+headers.map(x=>'<th>'+x+'</th>').join('')+'</tr></thead><tbody>'+rows.join('')+'</tbody></table></div>'}
+function renderTransactions(){let m=val('filterMonth'),t=val('filterType');let a=db.transactions.filter(x=>(!m||String(x.date||'').startsWith(m))&&(!t||x.type===t)).sort((a,b)=>(b.date||'').localeCompare(a.date||''));document.getElementById('transactionsTable').innerHTML=table(['तारीख','विवरण','प्रकार','राशि',''],a.map(x=>`<tr><td>${esc(x.date)}</td><td>${esc(x.note)}<br><span class="muted">${esc(x.category||'')}</span></td><td>${x.type==='income'?'आय':x.type==='expense'?'खर्च':'ट्रांसफर'}</td><td>${money(x.amount)}</td><td><button class="btn danger" onclick="delItem('transactions',${x.id})">हटाएँ</button></td></tr>`))}
+function renderAll(){let inc=db.transactions.filter(x=>x.type==='income').reduce((s,x)=>s+x.amount,0),exp=db.transactions.filter(x=>x.type==='expense').reduce((s,x)=>s+x.amount,0),bank=db.accounts.filter(x=>x.type!=='Credit Card').reduce((s,a)=>s+a.opening+db.transactions.filter(t=>t.account===String(a.id)||t.account===a.name).reduce((z,t)=>z+(t.type==='income'?t.amount:t.type==='expense'?-t.amount:0),0),0),invest=db.sips.reduce((s,x)=>s+x.value,0),assets=db.assets.reduce((s,x)=>s+x.value,0),debt=db.loans.reduce((s,l)=>s+Math.max(0,l.principal-(l.paid||0)),0);
+document.getElementById('sIncome').textContent=money(inc);document.getElementById('sExpense').textContent=money(exp);document.getElementById('sSaving').textContent=money(inc-exp);document.getElementById('sNet').textContent=money(bank+invest+assets-debt);
+let month=today().slice(0,7),mi=db.transactions.filter(x=>x.date?.startsWith(month)&&x.type==='income').reduce((s,x)=>s+x.amount,0),me=db.transactions.filter(x=>x.date?.startsWith(month)&&x.type==='expense').reduce((s,x)=>s+x.amount,0);
+document.getElementById('monthSummary').innerHTML=`इस महीने आय: <b class="positive">${money(mi)}</b><br>इस महीने खर्च: <b class="negative">${money(me)}</b><br>महीने की बचत: <b>${money(mi-me)}</b>`;
+let recent=db.transactions.slice().sort((a,b)=>(b.date||'').localeCompare(a.date||'')).slice(0,6);document.getElementById('recent').innerHTML=table(['तारीख','विवरण','प्रकार','राशि'],recent.map(x=>`<tr><td>${esc(x.date)}</td><td>${esc(x.note)}</td><td>${x.type}</td><td>${money(x.amount)}</td></tr>`));
+let opts='<option value="">नकद / निर्दिष्ट नहीं</option>'+db.accounts.map(a=>`<option value="${a.id}">${esc(a.name)}</option>`).join('');document.getElementById('txAccount').innerHTML=opts;document.getElementById('txToAccount').innerHTML=db.accounts.map(a=>`<option value="${a.id}">${esc(a.name)}</option>`).join('');
+document.getElementById('accountSummary').innerHTML=db.accounts.length?db.accounts.map(a=>`<p>${esc(a.name)} <span class="pill">${esc(a.type)}</span> · ${money(a.opening)}</p>`).join(''):'कोई खाता नहीं';
+document.getElementById('accountsTable').innerHTML=table(['नाम','प्रकार','शुरुआती बैलेंस',''],db.accounts.map(a=>`<tr><td>${esc(a.name)}</td><td>${esc(a.type)}</td><td>${money(a.opening)}</td><td><button class="btn danger" onclick="delItem('accounts',${a.id})">हटाएँ</button></td></tr>`));
+document.getElementById('loanSummary').innerHTML=db.loans.map(l=>`<p>${esc(l.name)} · EMI अनुमान <b>${money(l.emi)}</b></p>`).join('')||'कोई लोन नहीं';
+document.getElementById('loansTable').innerHTML=table(['लोन','मूल राशि','EMI अनुमान','कुल भुगतान दर्ज',''],db.loans.map(l=>`<tr><td>${esc(l.name)}<br><span class="muted">${l.rate}% · ${l.months} माह</span></td><td>${money(l.principal)}</td><td>${money(l.emi)}</td><td>${money(l.paid||0)}</td><td><button class="btn primary" onclick="payLoan(${l.id})">भुगतान</button> <button class="btn danger" onclick="delItem('loans',${l.id})">हटाएँ</button></td></tr>`));
+document.getElementById('investmentList').innerHTML='<h3>SIP / निवेश</h3>'+table(['नाम','मासिक SIP','वर्तमान मूल्य',''],db.sips.map(x=>`<tr><td>${esc(x.name)}</td><td>${money(x.monthly)}</td><td>${money(x.value)}</td><td><button class="btn danger" onclick="delItem('sips',${x.id})">हटाएँ</button></td></tr>`))+'<h3>LIC / बीमा</h3>'+table(['पॉलिसी','वार्षिक प्रीमियम','अगली तारीख',''],db.lics.map(x=>`<tr><td>${esc(x.name)}</td><td>${money(x.premium)}</td><td>${esc(x.date||'—')}</td><td><button class="btn danger" onclick="delItem('lics',${x.id})">हटाएँ</button></td></tr>`));
+document.getElementById('assetsTable').innerHTML=table(['नाम','प्रकार','मूल्य',''],db.assets.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.type)}</td><td>${money(x.value)}</td><td><button class="btn danger" onclick="delItem('assets',${x.id})">हटाएँ</button></td></tr>`));
+let spent=c=>db.transactions.filter(t=>t.type==='expense'&&t.date?.startsWith(month)&&String(t.category).toLowerCase()===c.toLowerCase()).reduce((s,t)=>s+t.amount,0);
+document.getElementById('budgetSummary').innerHTML=db.budgets.map(b=>{let u=spent(b.category),pct=Math.min(100,u/b.limit*100);return `<p><b>${esc(b.category)}</b> · ${money(u)} / ${money(b.limit)}<br><span class="pill">${Math.round(pct)}% उपयोग</span></p>`}).join('')||'बजट सेट नहीं है';
+document.getElementById('budgetTable').innerHTML=table(['कैटेगरी','मासिक सीमा',''],db.budgets.map(b=>`<tr><td>${esc(b.category)}</td><td>${money(b.limit)}</td><td><button class="btn danger" onclick="delItem('budgets',${b.id})">हटाएँ</button></td></tr>`));
+renderTransactions()}
+function downloadBackup(){let blob=new Blob([JSON.stringify({version:'4.0',exportedAt:new Date().toISOString(),data:db},null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='My-Finance-Backup-'+today()+'.json';a.click();URL.revokeObjectURL(a.href)}
+function restoreBackup(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let j=JSON.parse(r.result),d=j.data||j;for(const k of Object.keys(blank))if(!Array.isArray(d[k]))d[k]=[];if(!confirm('मौजूदा डेटा बदलकर बैकअप restore करें?'))return;db=d;save();alert('Backup restore हो गया')}catch(err){alert('यह सही backup JSON नहीं है')}};r.readAsText(f)}
+function resetApp(){if(confirm('सभी Finance App रिकॉर्ड हमेशा के लिए मिट जाएंगे। क्या पक्का?')){db=structuredClone(blank);save()}}
+renderAll();
+if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script></body></html>
